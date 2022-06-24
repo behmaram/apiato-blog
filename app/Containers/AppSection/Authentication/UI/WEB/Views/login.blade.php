@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Apiato</title>
     <style>
@@ -44,8 +44,8 @@
             padding: 15px;
             color: #FFFFFF;
             font-size: 14px;
-            -webkit-transition: all 0.3 ease;
-            transition: all 0.3 ease;
+            -webkit-transition: all 0.3s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
         }
 
@@ -68,25 +68,7 @@
             display: none;
         }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-
-        .container:before, .container:after {
-            content: "";
-            display: block;
-            clear: both;
-        }
-
-        .container .info {
-            margin: 50px auto;
-            text-align: center;
-        }
-
-        h1, .container .info h1 {
+        h1 {
             margin: 0 0 15px;
             padding: 0;
             font-size: 36px;
@@ -96,20 +78,6 @@
 
         .center {
             text-align: center;
-        }
-
-        .container .info span {
-            color: #4d4d4d;
-            font-size: 12px;
-        }
-
-        .container .info span a {
-            color: #000000;
-            text-decoration: none;
-        }
-
-        .container .info span .fa {
-            color: #EF3B3A;
         }
 
         body {
@@ -123,26 +91,30 @@
             color: red;
             margin-bottom: 10px;
         }
+
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
 <div class="login-page">
     <h1 class="center">Login</h1>
-    <div class="form">
-        <form class="login-form" action="{{route('login_post_form')}}" method="post">
-            @csrf
-            @if(session('status'))
-                <div class="text-red">{{ session('status') }}</div>
-            @endif
-            <input type="text" placeholder="email" id="email" name="email"/>
-            <span class="text-red">{{ $errors->first('email') }}</span>
-            <input type="password" placeholder="password" id="password" name="password"/>
-            <span class="text-red">{{ $errors->first('password') }}</span>
+    <form class="form" action="{{route('login_post_form')}}" method="post">
+        @csrf
+        @if(session('login'))
+            <div class="text-red">{{ session('login') }}</div>
+        @endif
+        <label class="hide" for="email">Email</label>
+        <input type="text" placeholder="email" id="email" name="email"/>
+        <span class="text-red">{{ $errors->first('email') }}</span>
+        <label class="hide" for="password">Password</label>
+        <input type="password" placeholder="password" id="password" name="password"/>
+        <span class="text-red">{{ $errors->first('password') }}</span>
 
-            <button>login</button>
-        </form>
-    </div>
+        <button>login</button>
+    </form>
 </div>
 
 </body>

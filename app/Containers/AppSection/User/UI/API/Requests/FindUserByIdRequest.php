@@ -2,13 +2,10 @@
 
 namespace App\Containers\AppSection\User\UI\API\Requests;
 
-use App\Containers\AppSection\User\Traits\IsOwnerTrait;
-use App\Ship\Parents\Requests\Request;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class FindUserByIdRequest extends Request
+class FindUserByIdRequest extends ParentRequest
 {
-    use IsOwnerTrait;
-
     /**
      * Define which Roles and/or Permissions has access to this request.
      */
@@ -35,14 +32,14 @@ class FindUserByIdRequest extends Request
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:users,id'
+            // 'id' => 'required',
         ];
     }
 
     public function authorize(): bool
     {
         return $this->check([
-            'hasAccess|isOwner',
+            'hasAccess',
         ]);
     }
 }

@@ -2,16 +2,16 @@
 
 namespace App\Containers\AppSection\Authorization\UI\API\Requests;
 
-use App\Ship\Parents\Requests\Request;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class DeleteRoleRequest extends Request
+class DeleteRoleRequest extends ParentRequest
 {
     /**
      * Define which Roles and/or Permissions has access to this request.
      */
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     /**
@@ -32,7 +32,7 @@ class DeleteRoleRequest extends Request
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:' . config('permission.table_names.roles') . ',id'
+            // 'id' => 'required',
         ];
     }
 

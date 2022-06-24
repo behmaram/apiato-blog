@@ -3,23 +3,21 @@
 namespace App\Containers\AppSection\Authorization\UI\API\Tests\Functional;
 
 use App\Containers\AppSection\Authorization\Models\Permission;
-use App\Containers\AppSection\Authorization\Tests\ApiTestCase;
+use App\Containers\AppSection\Authorization\UI\API\Tests\ApiTestCase;
 
 /**
  * Class FindPermissionTest.
  *
  * @group authorization
  * @group api
- *
- * @author  Mahmoud Zalt <mahmoud@zalt.me>
  */
 class FindPermissionTest extends ApiTestCase
 {
     protected string $endpoint = 'get@v1/permissions/{id}';
 
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     public function testFindPermissionById(): void
@@ -30,6 +28,15 @@ class FindPermissionTest extends ApiTestCase
 
         $response->assertStatus(200);
         $responseContent = $this->getResponseContentObject();
-        self::assertEquals($permissionA->name, $responseContent->data->name);
+        $this->assertEquals($permissionA->name, $responseContent->data->name);
+    }
+
+    public function testFindNonExistingPermission(): void
+    {
+        $invalidId = 7777;
+
+        $response = $this->injectId($invalidId)->makeCall([]);
+
+        $response->assertStatus(404);
     }
 }

@@ -6,7 +6,10 @@
  * @apiDescription     User Logout. (Revoking Access Token)
  *
  * @apiVersion         1.0.0
- * @apiPermission      Authenticated User
+ * @apiPermission      Authenticated ['permissions' => '', 'roles' => '']
+ *
+ * @apiHeader          {String} accept=application/json
+ * @apiHeader          {String} authorization=Bearer
  *
  * @apiSuccessExample  {json}       Success-Response:
  * HTTP/1.1 202 Accepted
@@ -15,10 +18,9 @@
  * }
  */
 
-use App\Containers\AppSection\Authentication\UI\API\Controllers\Controller;
+use App\Containers\AppSection\Authentication\UI\API\Controllers\LogoutController;
 use Illuminate\Support\Facades\Route;
 
-Route::delete('logout', [Controller::class, 'logout'])
-    ->name('api_authentication_logout')
+Route::delete('logout', [LogoutController::class, 'logout'])
     ->middleware(['auth:api']);
 

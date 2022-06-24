@@ -3,15 +3,15 @@
 namespace App\Containers\AppSection\Authorization\UI\API\Transformers;
 
 use App\Containers\AppSection\Authorization\Models\Permission;
-use App\Ship\Parents\Transformers\Transformer;
+use App\Ship\Parents\Transformers\Transformer as ParentTransformer;
 
-class PermissionTransformer extends Transformer
+class PermissionTransformer extends ParentTransformer
 {
-    protected $availableIncludes = [
+    protected array $availableIncludes = [
 
     ];
 
-    protected $defaultIncludes = [
+    protected array $defaultIncludes = [
 
     ];
 

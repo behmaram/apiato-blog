@@ -1,17 +1,7 @@
 {
     "name": "apiato/apiato",
+    "type": "project",
     "description": "A flawless framework for building scalable and testable API-Centric Apps with PHP and Laravel.",
-    "homepage": "http://apiato.io/",
-    "support": {
-        "issues": "https://github.com/apiato/apiato/issues",
-        "source": "https://github.com/apiato/apiato"
-    },
-    "authors": [
-        {
-            "name": "Mahmoud Zalt",
-            "email": "mahmoud@zalt.me"
-        }
-    ],
     "keywords": [
         "Apiato",
         "API",
@@ -26,36 +16,44 @@
         "Porto SAP"
     ],
     "license": "MIT",
-    "type": "project",
+    "homepage": "http://apiato.io/",
+    "support": {
+        "issues": "https://github.com/apiato/apiato/issues",
+        "source": "https://github.com/apiato/apiato"
+    },
+    "authors": [
+        {
+            "name": "Mahmoud Zalt",
+            "email": "mahmoud@zalt.me"
+        }
+    ],
     "require": {
-        "php": "7.4.25",
+        "php": "^8.0.2",
+        "ext-curl": "*",
+        "ext-gettext": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-pdo": "*",
+        "ext-sodium": "*",
         "ext-tokenizer": "*",
-        "apiato/core": "^6.2.5",
-        "apiato/documentation-generator-container": "^1.0.0",
-        "apiato/welcome-container": "^1.0.0",
-        "doctrine/dbal": "^3.1.2",
-        "fideloper/proxy": "^4.4.1",
-        "fruitcake/laravel-cors": "^1.0.6",
-        "guzzlehttp/guzzle": "^7.3.0",
-        "laravel/framework": "^8.73.0",
-        "laravel/tinker": "^2.6.0",
+        "guzzlehttp/guzzle": "^7.2",
+        "laravel/framework": "^9.2",
+        "laravel/tinker": "^2.7",
+        "lcobucci/clock": "2.1.0",
         "wikimedia/composer-merge-plugin": "^2.0.1"
     },
     "require-dev": {
         "ext-intl": "*",
         "ext-json": "*",
-        "apiato/debugger-container": "^1.1.0",
-        "barryvdh/laravel-ide-helper": "^2.12",
-        "facade/ignition": "^2.5.13",
-        "fakerphp/faker": "^1.13.0",
-        "laravel/homestead": "^12.0",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.3.0",
-        "phpunit/phpunit": "^9.5.2",
-        "roave/security-advisories": "dev-latest"
+        "friendsofphp/php-cs-fixer": "^3.8.0",
+        "roave/security-advisories": "dev-latest",
+        "fakerphp/faker": "^1.19.1",
+        "laravel/sail": "^1.13.10",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.1",
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.0",
+        "vimeo/psalm": "^4.22.0"
     },
     "autoload": {
         "psr-4": {
@@ -67,11 +65,24 @@
     "autoload-dev": {
         "psr-4": {}
     },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
     "extra": {
         "laravel": {
-            "dont-discover": [
-                "laravel/dusk"
-            ]
+            "dont-discover": []
         },
         "merge-plugin": {
             "include": [
@@ -86,24 +97,13 @@
             "merge-scripts": true
         }
     },
-    "scripts": {
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
-        ],
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
-        ]
-    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
             "apiato/container-installer": true,
+            "composer/package-versions-deprecated": true,
             "wikimedia/composer-merge-plugin": true
         }
     },

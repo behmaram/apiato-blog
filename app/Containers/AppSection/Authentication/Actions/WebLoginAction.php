@@ -2,47 +2,45 @@
 
 namespace App\Containers\AppSection\Authentication\Actions;
 
+use Apiato\Core\Exceptions\IncorrectIdException;
+use App\Containers\AppSection\Authentication\Classes\LoginCustomAttribute;
 use App\Containers\AppSection\Authentication\Exceptions\LoginFailedException;
-use App\Containers\AppSection\Authentication\Exceptions\UserNotConfirmedException;
-use App\Containers\AppSection\Authentication\Tasks\CheckIfUserEmailIsConfirmedTask;
-use App\Containers\AppSection\Authentication\Tasks\ExtractLoginCustomAttributeTask;
 use App\Containers\AppSection\Authentication\Tasks\LoginTask;
 use App\Containers\AppSection\Authentication\UI\WEB\Requests\LoginRequest;
-use App\Ship\Parents\Actions\Action;
+use App\Containers\AppSection\User\Models\User;
+use App\Ship\Parents\Actions\Action as ParentAction;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 
-class WebLoginAction extends Action
+class WebLoginAction extends ParentAction
 {
-    public function run(LoginRequest $request)
+    /**
+     * @param LoginRequest $request
+     * @return User|Authenticatable|null
+     * @throws LoginFailedException
+     * @throws IncorrectIdException
+     */
+    public function run(LoginRequest $request): User|Authenticatable|null
     {
         $sanitizedData = $request->sanitizeInput([
             'email',
             'password',
-            'remember_me' => true
+            'remember_me' => false,
         ]);
 
-        $loginCustomAttribute = app(ExtractLoginCustomAttributeTask::class)->run($sanitizedData);
+        list($username, $loginAttribute) = LoginCustomAttribute::extract($sanitizedData);
 
-        $isSuccessful = app(LoginTask::class)->run(
-            $loginCustomAttribute['username'],
+        $loggedIn = app(LoginTask::class)->run(
+            $username,
             $sanitizedData['password'],
-            $loginCustomAttribute['loginAttribute'],
+            $loginAttribute,
             $sanitizedData['remember_me']
         );
 
-        $user = null;
-        if ($isSuccessful) {
-            $user = Auth::user();
-        } else {
-            throw new LoginFailedException();
+        if (!$loggedIn) {
+            throw new LoginFailedException('Invalid Login Credentials.');
         }
 
-        $isUserConfirmed = app(CheckIfUserEmailIsConfirmedTask::class)->run($user);
-
-        if (!$isUserConfirmed) {
-            throw new UserNotConfirmedException();
-        }
-
-        return $user;
+        return Auth::user();
     }
 }

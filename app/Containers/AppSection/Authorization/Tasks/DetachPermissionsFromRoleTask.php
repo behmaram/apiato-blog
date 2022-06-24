@@ -2,22 +2,22 @@
 
 namespace App\Containers\AppSection\Authorization\Tasks;
 
+use App\Containers\AppSection\Authorization\Models\Permission;
 use App\Containers\AppSection\Authorization\Models\Role;
-use App\Ship\Parents\Tasks\Task;
+use App\Ship\Parents\Tasks\Task as ParentTask;
 
-class DetachPermissionsFromRoleTask extends Task
+class DetachPermissionsFromRoleTask extends ParentTask
 {
-    public function run(Role $role, $singleOrMultiplePermissionIds): Role
+    /**
+     * @param Role $role
+     * @param Permission[] $permissions
+     * @return Role
+     */
+    public function run(Role $role, array $permissions): Role
     {
-        if (!is_array($singleOrMultiplePermissionIds)) {
-            $singleOrMultiplePermissionIds = [$singleOrMultiplePermissionIds];
-        }
-
-        // remove each permission ID found in the array from that role.
-        array_map(static function ($permissionId) use ($role) {
-            $permission = app(FindPermissionTask::class)->run($permissionId);
+        array_map(static function ($permission) use ($role) {
             $role->revokePermissionTo($permission);
-        }, $singleOrMultiplePermissionIds);
+        }, $permissions);
 
         return $role;
     }

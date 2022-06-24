@@ -2,16 +2,16 @@
 
 namespace App\Containers\AppSection\Authorization\UI\API\Requests;
 
-use App\Ship\Parents\Requests\Request;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class GetAllPermissionsRequest extends Request
+class GetAllPermissionsRequest extends ParentRequest
 {
     /**
      * Define which Roles and/or Permissions has access to this request.
      */
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     /**

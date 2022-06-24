@@ -2,12 +2,12 @@
 
 namespace App\Containers\AppSection\User\UI\API\Requests;
 
-use App\Containers\AppSection\User\Traits\IsOwnerTrait;
-use App\Ship\Parents\Requests\Request;
+use App\Containers\AppSection\Authorization\Traits\IsResourceOwnerTrait;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class UpdateUserRequest extends Request
+class UpdateUserRequest extends ParentRequest
 {
-    use IsOwnerTrait;
+    use IsResourceOwnerTrait;
 
     /**
      * Define which Roles and/or Permissions has access to this request.
@@ -35,21 +35,16 @@ class UpdateUserRequest extends Request
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:users,id',
-            'password' => 'min:6|max:40',
             'name' => 'min:2|max:50',
             'gender' => 'in:male,female,unspecified',
-            'birth' => 'date_format:Ymd',
+            'birth' => 'date',
         ];
     }
 
     public function authorize(): bool
     {
-        // is this an admin who has access to permission `update-users`
-        // or the user is updating his own object (is the owner).
-
         return $this->check([
-            'hasAccess|isOwner',
+            'hasAccess|isResourceOwner',
         ]);
     }
 }

@@ -3,18 +3,20 @@
 namespace App\Containers\AppSection\Authorization\Actions;
 
 use App\Containers\AppSection\Authorization\Tasks\DeleteRoleTask;
-use App\Containers\AppSection\Authorization\Tasks\FindRoleTask;
 use App\Containers\AppSection\Authorization\UI\API\Requests\DeleteRoleRequest;
-use App\Ship\Parents\Actions\Action;
-use Spatie\Permission\Contracts\Role;
+use App\Ship\Exceptions\DeleteResourceFailedException;
+use App\Ship\Exceptions\NotFoundException;
+use App\Ship\Parents\Actions\Action as ParentAction;
 
-class DeleteRoleAction extends Action
+class DeleteRoleAction extends ParentAction
 {
-    public function run(DeleteRoleRequest $request): Role
+    /**
+     * @param DeleteRoleRequest $request
+     * @throws DeleteResourceFailedException
+     * @throws NotFoundException
+     */
+    public function run(DeleteRoleRequest $request): void
     {
-        $role = app(FindRoleTask::class)->run($request->id);
-        app(DeleteRoleTask::class)->run($role);
-
-        return $role;
+        app(DeleteRoleTask::class)->run($request->id);
     }
 }

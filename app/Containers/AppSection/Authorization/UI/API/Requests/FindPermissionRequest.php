@@ -2,16 +2,16 @@
 
 namespace App\Containers\AppSection\Authorization\UI\API\Requests;
 
-use App\Ship\Parents\Requests\Request;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class FindPermissionRequest extends Request
+class FindPermissionRequest extends ParentRequest
 {
     /**
      * Define which Roles and/or Permissions has access to this request.
      */
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     /**
@@ -32,7 +32,7 @@ class FindPermissionRequest extends Request
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:' . config('permission.table_names.permissions') . ',id'
+            // 'id' => 'required',
         ];
     }
 

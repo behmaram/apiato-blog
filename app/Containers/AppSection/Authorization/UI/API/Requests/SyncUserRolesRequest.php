@@ -2,16 +2,16 @@
 
 namespace App\Containers\AppSection\Authorization\UI\API\Requests;
 
-use App\Ship\Parents\Requests\Request;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class SyncUserRolesRequest extends Request
+class SyncUserRolesRequest extends ParentRequest
 {
     /**
      * Define which Roles and/or Permissions has access to this request.
      */
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-admins-access',
+        'roles' => '',
     ];
 
     /**
@@ -34,8 +34,7 @@ class SyncUserRolesRequest extends Request
     {
         return [
             'roles_ids' => 'required',
-            'roles_ids.*' => 'exists:' . config('permission.table_names.roles') . ',id',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required',
         ];
     }
 

@@ -3,17 +3,17 @@
 namespace App\Containers\AppSection\Authorization\UI\API\Transformers;
 
 use App\Containers\AppSection\Authorization\Models\Role;
-use App\Ship\Parents\Transformers\Transformer;
+use App\Ship\Parents\Transformers\Transformer as ParentTransformer;
 use League\Fractal\Resource\Collection;
 
-class RoleTransformer extends Transformer
+class RoleTransformer extends ParentTransformer
 {
-    protected $availableIncludes = [
+    protected array $availableIncludes = [
 
     ];
 
-    protected $defaultIncludes = [
-        'permissions'
+    protected array $defaultIncludes = [
+        'permissions',
     ];
 
     public function transform(Role $role): array
@@ -24,7 +24,6 @@ class RoleTransformer extends Transformer
             'name' => $role->name, // << Unique Identifier
             'description' => $role->description,
             'display_name' => $role->display_name,
-            'level' => $role->level,
         ];
     }
 

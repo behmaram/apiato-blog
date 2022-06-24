@@ -3,36 +3,32 @@
 namespace App\Containers\AppSection\Authorization\Tasks;
 
 use App\Containers\AppSection\Authorization\Data\Repositories\RoleRepository;
-use App\Containers\AppSection\Authorization\Models\Role;
 use App\Ship\Exceptions\DeleteResourceFailedException;
-use App\Ship\Parents\Tasks\Task;
+use App\Ship\Exceptions\NotFoundException;
+use App\Ship\Parents\Tasks\Task as ParentTask;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class DeleteRoleTask extends Task
+class DeleteRoleTask extends ParentTask
 {
-    protected RoleRepository $repository;
-
-    public function __construct(RoleRepository $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        protected RoleRepository $repository
+    ) {
     }
 
     /**
-     * @param Integer|Role $role
-     *
-     * @return bool
+     * @param $id
+     * @return int
      * @throws DeleteResourceFailedException
+     * @throws NotFoundException
      */
-    public function run($role): bool
+    public function run($id): int
     {
-        if ($role instanceof Role) {
-            $role = $role->id;
-        }
-
-        // delete the record from the roles table.
         try {
-            return $this->repository->delete($role);
-        } catch (Exception $exception) {
+            return $this->repository->delete($id);
+        } catch (ModelNotFoundException) {
+            throw new NotFoundException();
+        } catch (Exception) {
             throw new DeleteResourceFailedException();
         }
     }

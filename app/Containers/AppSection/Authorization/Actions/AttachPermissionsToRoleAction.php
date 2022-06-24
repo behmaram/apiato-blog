@@ -5,16 +5,21 @@ namespace App\Containers\AppSection\Authorization\Actions;
 use App\Containers\AppSection\Authorization\Models\Role;
 use App\Containers\AppSection\Authorization\Tasks\FindPermissionTask;
 use App\Containers\AppSection\Authorization\Tasks\FindRoleTask;
-use App\Containers\AppSection\Authorization\UI\API\Requests\AttachPermissionToRoleRequest;
-use App\Ship\Parents\Actions\Action;
+use App\Containers\AppSection\Authorization\UI\API\Requests\AttachPermissionsToRoleRequest;
+use App\Ship\Exceptions\NotFoundException;
+use App\Ship\Parents\Actions\Action as ParentAction;
 
-class AttachPermissionsToRoleAction extends Action
+class AttachPermissionsToRoleAction extends ParentAction
 {
-    public function run(AttachPermissionToRoleRequest $request): Role
+    /**
+     * @param AttachPermissionsToRoleRequest $request
+     * @return Role
+     * @throws NotFoundException
+     */
+    public function run(AttachPermissionsToRoleRequest $request): Role
     {
         $role = app(FindRoleTask::class)->run($request->role_id);
 
-        // convert to array in case single ID was passed
         $permissionIds = (array)$request->permissions_ids;
 
         $permissions = array_map(static function ($permissionId) {

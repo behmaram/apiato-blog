@@ -2,12 +2,17 @@
 
 /**
  * @apiGroup           RolePermission
- * @apiName            deleteRole
+ * @apiName            DeleteRole
  * @api                {delete} /v1/roles/:id Delete a Role
  * @apiDescription     Delete Role by ID
  *
  * @apiVersion         1.0.0
- * @apiPermission      Authenticated Role
+ * @apiPermission      Authenticated ['permissions' => 'manage-roles', 'roles' => '']
+ *
+ * @apiHeader          {String} accept=application/json
+ * @apiHeader          {String} authorization=Bearer
+ *
+ * @apiParam           {String} id role id
  *
  * @apiSuccessExample  {json}       Success-Response:
  * HTTP/1.1 202 OK
@@ -16,9 +21,8 @@
  * }
  */
 
-use App\Containers\AppSection\Authorization\UI\API\Controllers\Controller;
+use App\Containers\AppSection\Authorization\UI\API\Controllers\DeleteRoleController;
 use Illuminate\Support\Facades\Route;
 
-Route::delete('roles/{id}', [Controller::class, 'deleteRole'])
-    ->name('api_authorization_delete_role')
+Route::delete('roles/{id}', [DeleteRoleController::class, 'deleteRole'])
     ->middleware(['auth:api']);

@@ -2,23 +2,22 @@
 
 namespace App\Containers\AppSection\Authorization\UI\API\Tests\Functional;
 
-use App\Containers\AppSection\Authorization\Tests\ApiTestCase;
+use App\Containers\AppSection\Authorization\UI\API\Tests\ApiTestCase;
+use Illuminate\Testing\Fluent\AssertableJson;
 
 /**
  * Class CreateRoleTest.
  *
  * @group authorization
  * @group api
- *
- * @author  Mahmoud Zalt <mahmoud@zalt.me>
  */
 class CreateRoleTest extends ApiTestCase
 {
     protected string $endpoint = 'post@v1/roles';
 
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     public function testCreateRole(): void
@@ -27,36 +26,19 @@ class CreateRoleTest extends ApiTestCase
             'name' => 'manager',
             'display_name' => 'manager',
             'description' => 'he manages things',
-            'level' => 7,
         ];
 
         $response = $this->makeCall($data);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $responseContent = $this->getResponseContentObject();
-        self::assertEquals($data['name'], $responseContent->data->name);
-        self::assertEquals($data['level'], $responseContent->data->level);
-    }
-
-    public function testCreateRoleWithoutLevel(): void
-    {
-        $data = [
-            'name' => 'manager',
-            'display_name' => 'manager',
-            'description' => 'he manages things',
-        ];
-
-        $response = $this->makeCall($data);
-
-        $response->assertStatus(200);
-        $responseContent = $this->getResponseContentObject();
-        self::assertEquals(0, $responseContent->data->level);
+        $this->assertEquals($data['name'], $responseContent->data->name);
     }
 
     public function testCreateRoleWithWrongName(): void
     {
         $data = [
-            'name' => 'include Space',
+            'name' => 'includes Space',
             'display_name' => 'manager',
             'description' => 'he manages things',
         ];
@@ -64,5 +46,20 @@ class CreateRoleTest extends ApiTestCase
         $response = $this->makeCall($data);
 
         $response->assertStatus(422);
+        $response->assertJson(
+            fn (AssertableJson $json) =>
+                $json->has('message')
+                    ->has('errors')
+                    ->where('errors.name.0', 'String should not contain space.')
+        );
+    }
+
+    public function testGivenHaveNoAccess_CannotCreateRole(): void
+    {
+        $this->getTestingUserWithoutAccess();
+
+        $response = $this->makeCall([]);
+
+        $response->assertStatus(403);
     }
 }

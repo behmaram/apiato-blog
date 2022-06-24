@@ -3,23 +3,21 @@
 namespace App\Containers\AppSection\Authorization\UI\API\Tests\Functional;
 
 use App\Containers\AppSection\Authorization\Models\Role;
-use App\Containers\AppSection\Authorization\Tests\ApiTestCase;
+use App\Containers\AppSection\Authorization\UI\API\Tests\ApiTestCase;
 
 /**
  * Class FindRoleTest.
  *
  * @group authorization
  * @group api
- *
- * @author  Mahmoud Zalt <mahmoud@zalt.me>
  */
 class FindRoleTest extends ApiTestCase
 {
     protected string $endpoint = 'get@v1/roles/{id}';
 
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     public function testFindRoleById(): void
@@ -30,6 +28,15 @@ class FindRoleTest extends ApiTestCase
 
         $response->assertStatus(200);
         $responseContent = $this->getResponseContentObject();
-        self::assertEquals($roleA->name, $responseContent->data->name);
+        $this->assertEquals($roleA->name, $responseContent->data->name);
+    }
+
+    public function testFindNonExistingRole(): void
+    {
+        $invalidId = 7777;
+
+        $response = $this->injectId($invalidId)->makeCall([]);
+
+        $response->assertStatus(404);
     }
 }

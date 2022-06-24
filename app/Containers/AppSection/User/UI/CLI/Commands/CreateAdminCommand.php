@@ -3,10 +3,9 @@
 namespace App\Containers\AppSection\User\UI\CLI\Commands;
 
 use App\Containers\AppSection\User\Actions\CreateAdminAction;
-use App\Containers\AppSection\User\UI\API\Requests\CreateAdminRequest;
-use App\Ship\Parents\Commands\ConsoleCommand;
+use App\Ship\Parents\Commands\ConsoleCommand as ParentConsoleCommand;
 
-class CreateAdminCommand extends ConsoleCommand
+class CreateAdminCommand extends ParentConsoleCommand
 {
     protected $signature = 'apiato:create:admin';
 
@@ -21,16 +20,17 @@ class CreateAdminCommand extends ConsoleCommand
 
         if ($password !== $password_confirmation) {
             $this->error('Passwords do not match - exiting!');
+
             return;
         }
 
-        $request = new CreateAdminRequest([
+        $data = [
             'name' => $username,
             'email' => $email,
             'password' => $password,
-        ]);
+        ];
 
-        app(CreateAdminAction::class)->run($request);
+        app(CreateAdminAction::class)->run($data);
 
         $this->info('Admin ' . $email . ' was successfully created');
     }

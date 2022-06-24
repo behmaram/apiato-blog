@@ -3,7 +3,7 @@
 namespace App\Containers\AppSection\User\UI\API\Tests\Functional;
 
 use App\Containers\AppSection\User\Models\User;
-use App\Containers\AppSection\User\Tests\ApiTestCase;
+use App\Containers\AppSection\User\UI\API\Tests\ApiTestCase;
 
 /**
  * Class DeleteUserTest.
@@ -16,8 +16,8 @@ class DeleteUserTest extends ApiTestCase
     protected string $endpoint = 'delete@v1/users/{id}';
 
     protected array $access = [
-        'roles' => '',
         'permissions' => 'delete-users',
+        'roles' => '',
     ];
 
     public function testDeleteExistingUser(): void
@@ -29,7 +29,16 @@ class DeleteUserTest extends ApiTestCase
         $response->assertStatus(204);
     }
 
-    public function testDeleteAnotherExistingUser(): void
+    public function testDeleteNonExistingUser(): void
+    {
+        $invalidId = 7777;
+
+        $response = $this->injectId($invalidId)->makeCall([]);
+
+        $response->assertStatus(404);
+    }
+
+    public function testGivenHaveNoAccess_CannotDeleteAnotherUser(): void
     {
         $this->getTestingUserWithoutAccess();
         $anotherUser = User::factory()->create();

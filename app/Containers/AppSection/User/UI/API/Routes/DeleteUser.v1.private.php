@@ -2,23 +2,25 @@
 
 /**
  * @apiGroup           User
- * @apiName            deleteUser
+ * @apiName            DeleteUser
  * @api                {delete} /v1/users/:id Delete User
  * @apiDescription     Delete users of any type (Admin, Client...)
  *
  * @apiVersion         1.0.0
- * @apiPermission      Authenticated User
+ * @apiPermission      Authenticated ['permissions' => 'delete-users', 'roles' => ''] | Resource Owner
+ *
+ * @apiHeader          {String} accept=application/json
+ * @apiHeader          {String} authorization=Bearer
+ *
+ * @apiParam           {String} id user id
  *
  * @apiSuccessExample  {json}       Success-Response:
- * HTTP/1.1 202 OK
- * {
- * "message": "User (4) Deleted Successfully."
- * }
+ * HTTP/1.1 204 No Content
+ * {}
  */
 
-use App\Containers\AppSection\User\UI\API\Controllers\Controller;
+use App\Containers\AppSection\User\UI\API\Controllers\DeleteUserController;
 use Illuminate\Support\Facades\Route;
 
-Route::delete('users/{id}', [Controller::class, 'deleteUser'])
-    ->name('api_user_delete_user')
+Route::delete('users/{id}', [DeleteUserController::class, 'deleteUser'])
     ->middleware(['auth:api']);

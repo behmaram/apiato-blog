@@ -7,14 +7,16 @@
  * @apiDescription     Login Users using their username and passwords. (For First-Party Clients)
  *
  * @apiVersion         1.0.0
- * @apiPermission      Authenticated User
+ * @apiPermission      none
  *
- * @apiParam           {String}  username user email
- * @apiParam           {String}  password user password
- * @apiParam           {String}  client_id
- * @apiParam           {String}  client_secret
- * @apiParam           {String}  grant_type must be `password`
- * @apiParam           {String}  [scope] you can leave it empty
+ * @apiHeader          {String} accept=application/json
+ *
+ * @apiBody           {String}  username user email
+ * @apiBody           {String}  password user password
+ * @apiBody           {String}  client_id
+ * @apiBody           {String}  client_secret
+ * @apiBody           {String}  grant_type must be `password`
+ * @apiBody           {String}  [scope] you can leave it empty
  *
  * @apiSuccessExample  {json}       Success-Response:
  * HTTP/1.1 200 OK

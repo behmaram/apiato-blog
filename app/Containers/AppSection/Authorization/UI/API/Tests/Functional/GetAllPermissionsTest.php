@@ -2,23 +2,21 @@
 
 namespace App\Containers\AppSection\Authorization\UI\API\Tests\Functional;
 
-use App\Containers\AppSection\Authorization\Tests\ApiTestCase;
+use App\Containers\AppSection\Authorization\UI\API\Tests\ApiTestCase;
 
 /**
  * Class GetAllPermissionsTest.
  *
  * @group authorization
  * @group api
- *
- * @author  Mahmoud Zalt <mahmoud@zalt.me>
  */
 class GetAllPermissionsTest extends ApiTestCase
 {
     protected string $endpoint = 'get@v1/permissions';
 
     protected array $access = [
-        'roles' => '',
         'permissions' => 'manage-roles',
+        'roles' => '',
     ];
 
     public function testGetAllPermissions(): void
@@ -27,6 +25,6 @@ class GetAllPermissionsTest extends ApiTestCase
 
         $response->assertStatus(200);
         $responseContent = $this->getResponseContentObject();
-        self::assertTrue(count($responseContent->data) > 0);
+        $this->assertNotEmpty($responseContent->data);
     }
 }

@@ -2,23 +2,21 @@
 
 namespace App\Containers\AppSection\Authorization\Actions;
 
-use App\Containers\AppSection\Authorization\Exceptions\PermissionNotFoundException;
 use App\Containers\AppSection\Authorization\Models\Permission;
 use App\Containers\AppSection\Authorization\Tasks\FindPermissionTask;
 use App\Containers\AppSection\Authorization\UI\API\Requests\FindPermissionRequest;
-use App\Ship\Parents\Actions\Action;
-use Illuminate\Support\Facades\App;
+use App\Ship\Exceptions\NotFoundException;
+use App\Ship\Parents\Actions\Action as ParentAction;
 
-class FindPermissionAction extends Action
+class FindPermissionAction extends ParentAction
 {
+    /**
+     * @param FindPermissionRequest $request
+     * @return Permission
+     * @throws NotFoundException
+     */
     public function run(FindPermissionRequest $request): Permission
     {
-        $permission = App::make(FindPermissionTask::class)->run($request->id);
-
-        if (!$permission) {
-            throw new PermissionNotFoundException();
-        }
-
-        return $permission;
+        return app(FindPermissionTask::class)->run($request->id);
     }
 }

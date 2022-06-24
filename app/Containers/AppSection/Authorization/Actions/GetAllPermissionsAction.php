@@ -2,12 +2,19 @@
 
 namespace App\Containers\AppSection\Authorization\Actions;
 
+use Apiato\Core\Exceptions\CoreInternalErrorException;
 use App\Containers\AppSection\Authorization\Tasks\GetAllPermissionsTask;
-use App\Ship\Parents\Actions\Action;
+use App\Ship\Parents\Actions\Action as ParentAction;
+use Prettus\Repository\Exceptions\RepositoryException;
 
-class GetAllPermissionsAction extends Action
+class GetAllPermissionsAction extends ParentAction
 {
-    public function run()
+    /**
+     * @return mixed
+     * @throws CoreInternalErrorException
+     * @throws RepositoryException
+     */
+    public function run(): mixed
     {
         return app(GetAllPermissionsTask::class)->run();
     }

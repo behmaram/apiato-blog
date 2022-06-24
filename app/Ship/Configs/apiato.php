@@ -9,7 +9,6 @@ return [
     'hash-id' => env('HASH_ID', true),
 
     'api' => [
-
         /*
         |--------------------------------------------------------------------------
         | API URL
@@ -76,14 +75,14 @@ return [
         |--------------------------------------------------------------------------
         |
         | Attempts per minutes.
-        | `attempts` the number of attempts per `expires` in minutes.
+        | `attempts` is the number of attempts per `expires` in minutes.
         |
         */
         'throttle' => [
-            'enabled' => env('API_RATE_LIMIT_ENABLED', true),
-            'attempts' => env('API_RATE_LIMIT_ATTEMPTS', '30'),
-            'expires' => env('API_RATE_LIMIT_EXPIRES', '1'),
-        ]
+            'enabled' => env('GLOBAL_API_RATE_LIMIT_ENABLED', true),
+            'attempts' => env('GLOBAL_API_RATE_LIMIT_ATTEMPTS_PER_MIN', '30'),
+            'expires' => env('GLOBAL_API_RATE_LIMIT_EXPIRES_IN_MIN', '1'),
+        ],
 
     ],
 
@@ -101,7 +100,9 @@ return [
         | Default: []
         |
         */
-        'allow-roles-to-access-all-routes' => [],
+        'allow-roles-to-access-all-routes' => [
+            env('ADMIN_ROLE', 'admin'),
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -156,7 +157,7 @@ return [
         |
         */
         'deployment' => App\Ship\Seeders\SeedDeploymentData::class,
-        'testing' => App\Ship\Seeders\SeedTestingData::class
+        'testing' => App\Ship\Seeders\SeedTestingData::class,
     ],
 
     'tests' => [
@@ -179,6 +180,6 @@ return [
         |--------------------------------------------------------------------------
         |
         */
-        'user-admin-state' => 'admin'
-    ]
+        'user-admin-state' => 'admin',
+    ],
 ];

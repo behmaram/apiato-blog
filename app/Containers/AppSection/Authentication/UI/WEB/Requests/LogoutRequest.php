@@ -2,15 +2,15 @@
 
 namespace App\Containers\AppSection\Authentication\UI\WEB\Requests;
 
-use App\Ship\Parents\Requests\Request;
+use App\Ship\Parents\Requests\Request as ParentRequest;
 
-class LogoutRequest extends Request
+class LogoutRequest extends ParentRequest
 {
     /**
      * Define which Roles and/or Permissions has access to this request.
      */
     protected array $access = [
-        'permissions' => null
+        'permissions' => null,
     ];
 
     /**

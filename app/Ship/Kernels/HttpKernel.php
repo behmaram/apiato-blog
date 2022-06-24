@@ -2,16 +2,15 @@
 
 namespace App\Ship\Kernels;
 
-use App\Ship\Middlewares\Http\Authenticate;
-use App\Ship\Middlewares\Http\EncryptCookies;
-use App\Ship\Middlewares\Http\PreventRequestsDuringMaintenance;
-use App\Ship\Middlewares\Http\ProcessETagHeadersMiddleware;
-use App\Ship\Middlewares\Http\ProfilerMiddleware;
-use App\Ship\Middlewares\Http\TrimStrings;
-use App\Ship\Middlewares\Http\TrustProxies;
-use App\Ship\Middlewares\Http\ValidateJsonContent;
-use App\Ship\Middlewares\Http\VerifyCsrfToken;
-use Fruitcake\Cors\HandleCors;
+use Apiato\Core\Middlewares\Http\ProcessETagHeadersMiddleware;
+use Apiato\Core\Middlewares\Http\ProfilerMiddleware;
+use Apiato\Core\Middlewares\Http\ValidateJsonContent;
+use App\Ship\Middlewares\Authenticate;
+use App\Ship\Middlewares\EncryptCookies;
+use App\Ship\Middlewares\PreventRequestsDuringMaintenance;
+use App\Ship\Middlewares\TrimStrings;
+use App\Ship\Middlewares\TrustProxies;
+use App\Ship\Middlewares\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Auth\Middleware\RequirePassword;
@@ -19,6 +18,7 @@ use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as LaravelHttpKernel;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
@@ -34,10 +34,10 @@ class HttpKernel extends LaravelHttpKernel
      *
      * These middleware are run during every request to your application.
      *
-     * @var array
+     * @var array<int, class-string|string>
      */
     protected $middleware = [
-        // Laravel middleware's
+        // Laravel middlewares
         // \App\Http\Middleware\TrustHosts::class,
         TrustProxies::class,
         HandleCors::class,
@@ -50,14 +50,13 @@ class HttpKernel extends LaravelHttpKernel
     /**
      * The application's route middleware groups.
      *
-     * @var array
+     * @var array<string, array<int, class-string|string>>
      */
     protected $middlewareGroups = [
         'web' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
-//             \Illuminate\Session\Middleware\AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
@@ -65,6 +64,7 @@ class HttpKernel extends LaravelHttpKernel
 
         'api' => [
             // Note: The "throttle" Middleware is registered by the RoutesLoaderTrait in the Core
+            // 'throttle:api',
             SubstituteBindings::class,
             ValidateJsonContent::class,
             ProcessETagHeadersMiddleware::class,
@@ -77,15 +77,15 @@ class HttpKernel extends LaravelHttpKernel
      *
      * These middleware may be assigned to groups or used individually.
      *
-     * @var array
+     * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
         'auth' => Authenticate::class,
         // 'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.session' => AuthenticateSession::class,
         'cache.headers' => SetCacheHeaders::class,
-        // Note: The "can" Middleware is registered by MiddlewareServiceProvider in Authorization Container
-        // 'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        // Note: The "guest" Middleware is registered by MiddlewareServiceProvider in Authentication Container
+        'can' => Authorize::class,
+        // Note: The "guest" middleware is registered by MiddlewareServiceProvider in Authentication Container
         // 'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,

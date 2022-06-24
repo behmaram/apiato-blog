@@ -9,7 +9,7 @@
    <img src="https://github.com/apiato/documentation/blob/master/images/apiato.jpg" alt="Apiato Logo"/>
 </p>
 
-<h3 align="center">Build scalable API's faster | With PHP 7.4 and Laravel 8.0</h3>
+<h3 align="center">Build scalable API's faster | With PHP 8.0 and Laravel 9.0</h3>
 
 <p align="center">
 <a href="https://travis-ci.org/apiato/apiato"><img src="https://travis-ci.org/apiato/apiato.svg" alt="Build Status"></a>
@@ -206,16 +206,15 @@ Apiato is an MIT-licensed open source project with its ongoing development made 
             <a href="https://github.com/mohammad-alavi">@Mohammad-Alavi</a>
         </td>
           <td align="center" valign="top">
-            <img width="125" height="125" src="https://github.com/moslem-deris.png?s=150">
+            <img width="125" height="125" src="https://github.com/mderis.png?s=150">
             <br>
             <strong>Moslem Deris</strong>
             <br>
-            <a href="https://github.com/moslem-deris">@moslem-deris</a>
+            <a href="https://github.com/mderis">@mderis</a>
           </td>
         </tr>
   </tbody>
 </table>
-
 
 ### Code Contributors
 

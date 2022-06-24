@@ -6,12 +6,13 @@ return [
     | Email Confirmation
     |--------------------------------------------------------------------------
     |
-    | When set to true, the user must confirm his email before being able to
+    | When set to true, the user must verify his email before being able to
     | Login, after his registration.
     |
     */
 
-    'require_email_confirmation' => false,
+    'require_email_verification' => true,
+    'verification_link_expiration_time' => 30, // in minute
 
     /*
     |--------------------------------------------------------------------------
@@ -40,7 +41,7 @@ return [
     | Login With Custom Field
     |--------------------------------------------------------------------------
     |
-    | This allows you to chose which field you want to use for passport auth.
+    | This allows you to choose which field you want to use for passport auth.
     |
     */
 
@@ -51,10 +52,10 @@ return [
         | Allowed Login Attributes
         |--------------------------------------------------------------------------
         |
-        | A list of fields the user can login with.
+        | A list of fields the user can log in with.
         | The key is the field name. The value contains validation rules of the key.
         |
-        | The order determines the order the fields are tested to login (in case multiple fields are submitted!
+        | The order determines the order the fields are tested to log in (in case multiple fields are submitted!)
         |
         | Example: 'phone' => ['string', 'min:6', 'max:25'],
         |
@@ -63,6 +64,18 @@ return [
         'attributes' => [
             'email' => ['email'],
         ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Case Sensitive
+        |--------------------------------------------------------------------------
+        |
+        | This field represents if login attribute should be case-sensitive.
+        | If false, then user can log in with both `admin@admin.com` and `Admin@Admin.Com`
+        |
+        */
+
+        'case_sensitive' => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -80,12 +93,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Login Page Url
+    | Reset Password URLs
     |--------------------------------------------------------------------------
     |
-    | unauthorized access on protected web pages will be redirected to this url
+    | Insert your allowed reset password urls which user can request to be injected into the email.
     |
     */
+    'allowed-reset-password-urls' => [
+        env('APP_URL', 'http://api.apiato.test/v1') . '/password/reset',
+    ],
 
-    'login-page-url' => 'login',
+    /*
+    |--------------------------------------------------------------------------
+    | Verify Email URLs
+    |--------------------------------------------------------------------------
+    |
+    | Insert your allowed verify email urls which user can request to be injected into the email.
+    |
+*/
+    'allowed-verify-email-urls' => [
+        env('APP_URL', 'http://api.apiato.test/v1') . '/email/verify',
+    ],
 ];

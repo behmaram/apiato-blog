@@ -16,13 +16,12 @@ class Role extends SpatieRole
         FactoryLocatorTrait::newFactory insteadof HasFactory;
     }
 
-    protected $guard_name = 'web';
+    protected string $guard_name = 'api';
 
     protected $fillable = [
         'name',
         'guard_name',
         'display_name',
         'description',
-        'level',
     ];
 }
